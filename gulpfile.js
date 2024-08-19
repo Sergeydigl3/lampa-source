@@ -118,11 +118,11 @@ function bubbleFile(name){
 
 function plugins(done) {
     fs.readdirSync(plgFolder).filter(function (file) {
-        return fs.statSync(plgFolder+'/'+file).isDirectory();
+        return fs.statSync(plgFolder+'//'+file).isDirectory();
     }).forEach(folder => {
-        bubbleFile(folder+'/'+folder+'.js')
+        bubbleFile(folder+'//'+folder+'.js')
 
-        plugin_sass(plgFolder+'/'+folder)
+        plugin_sass(plgFolder+'//'+folder)
     });
       
     done();
