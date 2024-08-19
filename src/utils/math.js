@@ -293,30 +293,53 @@ function putScriptAsync(items, complite, error, success, show_logs){
     }
 
     function put(u){
-        u = u.replace('cub.watch', Lampa.Manifest.cub_domain)
-        
-        if(l) console.log('Script','create:',u)
+    u = u.replace('cub.watch', Lampa.Manifest.cub_domain)
+    
+    if(l) console.log('Script','create:', u)
 
-        let s = document.createElement('script')
-            s.onload = ()=>{
-                if(l) console.log('Script','include:',u)
-
-                if(success) success(u)
-
-                check()
+    // Загружаем скрипт через fetch
+    fetch(u)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-            s.onerror = ()=>{
-                if(l) console.log('Script','error:',u)
+            return response.text();
+        })
+        .then(scriptContent => {
+            // Здесь выполняем замену в содержимом скрипта
+            const modifiedScriptContent = scriptContent.replace(/Lampa\.Account\.hasPremium\(\)/g, 'true');
 
-                if(error) error(u)
+            // Создаем новый тег script
+            let s = document.createElement('script');
+            s.text = modifiedScriptContent;
 
-                check()
+            s.onload = () => {
+                if(l) console.log('Script','include:', u);
+
+                if(success) success(u);
+
+                check();
+            }
+            s.onerror = () => {
+                if(l) console.log('Script','error:', u);
+
+                if(error) error(u);
+
+                check();
             }
 
-            s.setAttribute('src', u)
-        
-            document.body.appendChild(s)
-    }
+            // Добавляем тег script на страницу
+            document.body.appendChild(s);
+        })
+        .catch(err => {
+            if(l) console.log('Script','fetch error:', u, err);
+
+            if(error) error(u);
+
+            check();
+        });
+}
+
 
     for(let i = 0; i < items.length; i++) put(items[i])
 }
