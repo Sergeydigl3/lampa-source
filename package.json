@@ -6,6 +6,7 @@
   "scripts": {
     "start": "gulp",
     "pack_github": "gulp pack_github",
+    "pack_vercel": "gulp pack_vercel",
     "debug": "gulp debug",
     "test": "vitest"
   },
