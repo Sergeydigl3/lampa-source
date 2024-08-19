@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp",
+    "pack_github": "gulp pack_github",
     "debug": "gulp debug",
     "test": "vitest"
   },
